@@ -42,6 +42,11 @@ public class BlockScript : MonoBehaviour
         return posFromCenter;
     }
 
+    public Vector3 GetCenterPosDataArray()
+    {
+        return new Vector3(currentWidthPos - posFromCenter.x, currentHeightPos - posFromCenter.y, 0);
+    }
+
     public void SetIdleState()
     {
         StartCoroutine(SetIdleStateDelay());

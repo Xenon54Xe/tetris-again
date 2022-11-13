@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{AC7E5700-3974-A35A-5F07-B7911AAC18F4}</ProjectGuid>
+    <ProjectGuid>{1A05B19B-2FBD-2694-96CB-A88A3E5FA59C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -54,8 +54,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\GameManager.cs" />
-    <Compile Include="Assets\BlockScript.cs" />
     <Compile Include="Assets\TableauInfo\TableauScript.cs" />
+    <Compile Include="Assets\BlockScript.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

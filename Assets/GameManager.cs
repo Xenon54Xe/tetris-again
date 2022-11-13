@@ -22,8 +22,6 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
 
     [Header("GameData")]
     private ShapeData currentShapeMoving;
-    private int centerShapeTrackerX;
-    private int centerShapeTrackerY;
 
     public Transform movingBlocksHierarchie;
 
@@ -45,6 +43,10 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
     private float timeRemainingBeforeNestGoDown = 1.5f;
     private bool canAddMoreDelay = true;
 
+    private int nextChoosedShape;
+    private int nextChoosedColor;
+    private bool nextReverse;
+
     private void Awake()
     {
         instance = this;
@@ -52,7 +54,13 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
 
     private void Start()
     {
-        ResetGame();
+        ResetGame(); 
+        int choosedShape = Random.Range(0, 7);
+        int choosedColor = Random.Range(0, 6);
+        SpawnNewShape(shapesData[choosedShape], choosedColor, Random.Range(0, 2) == 1);
+        nextChoosedShape = Random.Range(0, 7);
+        nextChoosedColor = Random.Range(0, 6);
+        nextReverse = Random.Range(0, 2) == 1;
     }
 
     private void Update()
@@ -71,13 +79,15 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
             {
                 // création nouvelle pièce
                 SetIdleMovingShape();
-                int choosedShape = Random.Range(0, 7);
-                int choosedColor = Random.Range(0, 6);
-                SpawnNewShape(shapesData[choosedShape], choosedColor, Random.Range(0, 2) == 1);
+
+                SpawnNewShape(shapesData[nextChoosedShape], nextChoosedColor, nextReverse);
                 if (!CanMove(Vector3.zero))
                 {
                     // Perdu...
                 }
+                nextChoosedShape = Random.Range(0, 7);
+                nextChoosedColor = Random.Range(0, 6);
+                nextReverse = Random.Range(0, 2) == 1;
             }
         }
 
@@ -121,6 +131,11 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
         {
             Move(move);
         }
+    }
+
+    private void ShowNextShape()
+    {
+
     }
 
     private void ResetGame()
@@ -180,8 +195,6 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
         }
 
         currentShapeMoving = choosedShape;
-        centerShapeTrackerX = spawnCenterPosX;
-        centerShapeTrackerY = spawnCenterPosY;
     }
 
     public void SetIdleMovingShape()
@@ -241,8 +254,8 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
                 int x = rotation == Rotation.Left ? -(int)vector.y : (int)vector.y;
                 int y = rotation == Rotation.Left ? (int)vector.x : -(int)vector.x;
 
-                int newX = x + centerShapeTrackerX + (int)move.x;
-                int newY = y + centerShapeTrackerY + (int)move.y;
+                int newX = x + (int)blockScript.GetCenterPosDataArray().x + (int)move.x;
+                int newY = y + (int)blockScript.GetCenterPosDataArray().y + (int)move.y;
 
                 if (newX < 0 || newX > playGroundWidth - 1 || newY < 0 || newY > playGroundHeight || idlingDataArray[newX, newY] == 1)
                 {
@@ -296,9 +309,6 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
 
             movingDataArray[blockScript.currentWidthPos, blockScript.currentHeightPos] = 1;
         }
-
-        centerShapeTrackerX += (int)move.x;
-        centerShapeTrackerY += (int)move.y;
     }
 
     public bool CanMove(Vector3 move)
@@ -332,9 +342,6 @@ public class GameManager : MonoBehaviour // Changer création d'une nouvelle form
     {
         int moveX = (int)move.x;
         int moveY = (int)move.y;
-
-        centerShapeTrackerX += moveX;
-        centerShapeTrackerY += moveY;
 
         // Déplacer les blocks dans la liste
         for (int ia = 0; ia < playGroundWidth; ia++)
